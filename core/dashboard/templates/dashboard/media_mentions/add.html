@@ -1,0 +1,97 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Yeni Basın Haberi Ekle{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="card shadow">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Yeni Basın Haberi Ekle</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>{{ form.title.label }}</label>
+                            {{ form.title|add_class:"form-control" }}
+                            {% if form.title.errors %}
+                                <div class="invalid-feedback d-block">{{ form.title.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>{{ form.source.label }}</label>
+                            {{ form.source|add_class:"form-control" }}
+                            {% if form.source.errors %}
+                                <div class="invalid-feedback d-block">{{ form.source.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>{{ form.url.label }}</label>
+                            {{ form.url|add_class:"form-control" }}
+                            {% if form.url.errors %}
+                                <div class="invalid-feedback d-block">{{ form.url.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>{{ form.publish_date.label }}</label>
+                            {{ form.publish_date|add_class:"form-control" }}
+                            {% if form.publish_date.errors %}
+                                <div class="invalid-feedback d-block">{{ form.publish_date.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>{{ form.description.label }}</label>
+                            {{ form.description|add_class:"form-control" }}
+                            {% if form.description.errors %}
+                                <div class="invalid-feedback d-block">{{ form.description.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>{{ form.image.label }}</label>
+                            {{ form.image|add_class:"form-control" }}
+                            {% if form.image.errors %}
+                                <div class="invalid-feedback d-block">{{ form.image.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>{{ form.order.label }}</label>
+                            {{ form.order|add_class:"form-control" }}
+                            {% if form.order.errors %}
+                                <div class="invalid-feedback d-block">{{ form.order.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <div class="form-check">
+                                {{ form.is_active|add_class:"form-check-input" }}
+                                <label class="form-check-label">{{ form.is_active.label }}</label>
+                            </div>
+                            {% if form.is_active.errors %}
+                                <div class="invalid-feedback d-block">{{ form.is_active.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                    <a href="{% url 'dashboard:dashboard_media_mentions' %}" class="btn btn-secondary">İptal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

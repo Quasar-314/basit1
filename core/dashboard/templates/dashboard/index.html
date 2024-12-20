@@ -1,0 +1,92 @@
+<!-- templates/dashboard/index.html -->
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Ana Sayfa{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4">Dashboard</h1>
+
+    <div class="row">
+        <!-- İstatistikler -->
+        <div class="col-md-3 mb-4">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Toplam Ürün</h5>
+                    <h2 class="card-text">{{ total_products }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Kategoriler</h5>
+                    <h2 class="card-text">{{ total_categories }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Yorumlar</h5>
+                    <h2 class="card-text">{{ total_reviews }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Basın Haberleri</h5>
+                    <h2 class="card-text">{{ total_media_mentions }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hızlı Erişim Linkleri -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3 class="mb-3">Hızlı Erişim</h3>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'dashboard:dashboard_about_edit' %}" class="text-decoration-none">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Hakkımızda Düzenle
+                        </h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'dashboard:dashboard_messages' %}" class="text-decoration-none">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-envelope me-2"></i>
+                            Mesajları Görüntüle
+                        </h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'dashboard:dashboard_products' %}" class="text-decoration-none">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-box me-2"></i>
+                            Ürünleri Yönet
+                        </h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,204 @@
+<!-- templates/dashboard/media_mentions/list.html -->
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Basında Biz{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Basında Biz</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMentionModal">
+            <i class="fas fa-plus me-2"></i>Yeni Ekle
+        </button>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Görsel</th>
+                            <th>Başlık</th>
+                            <th>Kaynak</th>
+                            <th>Yayın Tarihi</th>
+                            <th>Durum</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for mention in mentions %}
+                        <tr>
+                            <td>
+                                {% if mention.image %}
+                                    <img src="{{ mention.image.url }}" alt="{{ mention.title }}" style="height: 50px;">
+                                {% else %}
+                                    <span class="text-muted">Görsel yok</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ mention.title }}</td>
+                            <td>{{ mention.source }}</td>
+                            <td>{{ mention.publish_date|date:"d.m.Y" }}</td>
+                            <td>
+                                <span class="badge {% if mention.is_active %}bg-success{% else %}bg-danger{% endif %}">
+                                    {{ mention.is_active|yesno:"Aktif,Pasif" }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editMentionModal{{ mention.id }}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteMentionModal{{ mention.id }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Düzenleme Modal -->
+                        <div class="modal fade" id="editMentionModal{{ mention.id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Basın Haberi Düzenle</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:dashboard_media_mention_edit' mention.id %}">
+
+                                        {% csrf_token %}
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Başlık</label>
+                                                <input type="text" name="title" class="form-control" value="{{ mention.title }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Kaynak</label>
+                                                <input type="text" name="source" class="form-control" value="{{ mention.source }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">URL</label>
+                                                <input type="url" name="url" class="form-control" value="{{ mention.url }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Yayın Tarihi</label>
+                                                <input type="date" name="publish_date" class="form-control" value="{{ mention.publish_date|date:'Y-m-d' }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Açıklama</label>
+                                                <textarea name="description" class="form-control" rows="3">{{ mention.description }}</textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Görsel</label>
+                                                <input type="file" name="image" class="form-control">
+                                                {% if mention.image %}
+                                                    <img src="{{ mention.image.url }}" class="mt-2" style="max-height: 100px;">
+                                                {% endif %}
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Sıralama</label>
+                                                <input type="number" name="order" class="form-control" value="{{ mention.order }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="form-check">
+                                                    <input type="checkbox" name="is_active" class="form-check-input" {% if mention.is_active %}checked{% endif %}>
+                                                    <label class="form-check-label">Aktif</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Silme Modal -->
+                        <div class="modal fade" id="deleteMentionModal{{ mention.id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Silme Onayı</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>{{ mention.title }} başlıklı basın haberini silmek istediğinizden emin misiniz?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                        <form method="post" action="{% url 'dashboard:dashboard_media_mention_delete' mention.id %}">
+
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Sil</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">Henüz basın haberi eklenmemiş.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Yeni Ekle Modal -->
+<div class="modal fade" id="addMentionModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yeni Basın Haberi Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:dashboard_media_mention_add' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Başlık</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Kaynak</label>
+                        <input type="text" name="source" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">URL</label>
+                        <input type="url" name="url" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Yayın Tarihi</label>
+                        <input type="date" name="publish_date" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Açıklama</label>
+                        <textarea name="description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Görsel</label>
+                        <input type="file" name="image" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sıralama</label>
+                        <input type="number" name="order" class="form-control" value="0">
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" name="is_active" class="form-check-input" checked>
+                            <label class="form-check-label">Aktif</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

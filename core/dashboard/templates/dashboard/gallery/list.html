@@ -1,0 +1,242 @@
+<!-- templates/dashboard/gallery/list.html -->
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Galeri Yönetimi{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Galeri Yönetimi</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGalleryModal">
+            <i class="fas fa-plus me-2"></i>Yeni Ekle
+        </button>
+    </div>
+
+    <div class="row">
+        {% for item in galleries %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                {% if item.media_type == 'image' %}
+                    <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.title }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="position-relative" style="height: 200px;">
+                        <img src="{{ item.video_thumbnail.url }}" class="card-img-top h-100 object-fit-cover" alt="{{ item.title }}">
+                        <div class="position-absolute top-50 start-50 translate-middle">
+                            <i class="fas fa-play-circle fa-3x text-white"></i>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.title }}</h5>
+                    <p class="card-text">{{ item.description|truncatewords:20 }}</p>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge {% if item.is_active %}bg-success{% else %}bg-danger{% endif %}">
+                                {{ item.is_active|yesno:"Aktif,Pasif" }}
+                            </span>
+                            {% if item.is_featured %}
+                                <span class="badge bg-primary">Öne Çıkan</span>
+                            {% endif %}
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editGalleryModal{{ item.id }}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteGalleryModal{{ item.id }}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Düzenleme Modal -->
+        <div class="modal fade" id="editGalleryModal{{ item.id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Galeri Öğesi Düzenle</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:dashboard_gallery_add' %}">
+
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Başlık</label>
+                                <input type="text" name="title" class="form-control" value="{{ item.title }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Açıklama</label>
+                                <textarea name="description" class="form-control" rows="3">{{ item.description }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Medya Tipi</label>
+                                <select name="media_type" class="form-control" id="mediaType{{ item.id }}">
+                                    <option value="image" {% if item.media_type == 'image' %}selected{% endif %}>Resim</option>
+                                    <option value="video" {% if item.media_type == 'video' %}selected{% endif %}>Video</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 image-upload" id="imageUpload{{ item.id }}">
+                                <label class="form-label">Resim</label>
+                                <input type="file" name="image" class="form-control">
+                                {% if item.image %}
+                                    <img src="{{ item.image.url }}" class="mt-2" style="max-height: 100px;">
+                                {% endif %}
+                            </div>
+                            <div class="mb-3 video-upload" id="videoUpload{{ item.id }}">
+                                <label class="form-label">Video URL</label>
+                                <input type="url" name="video_url" class="form-control" value="{{ item.video_url }}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Sıralama</label>
+                                <input type="number" name="order" class="form-control" value="{{ item.order }}">
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input type="checkbox" name="is_active" class="form-check-input" {% if item.is_active %}checked{% endif %}>
+                                    <label class="form-check-label">Aktif</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" name="is_featured" class="form-check-input" {% if item.is_featured %}checked{% endif %}>
+                                    <label class="form-check-label">Öne Çıkan</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Silme Modal -->
+        <div class="modal fade" id="deleteGalleryModal{{ item.id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Silme Onayı</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{ item.title }} başlıklı öğeyi silmek istediğinizden emin misiniz?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                        <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:dashboard_gallery_add' %}">
+
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Sil</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Henüz galeri öğesi eklenmemiş.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Yeni Ekle Modal -->
+<div class="modal fade" id="addGalleryModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yeni Galeri Öğesi Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:dashboard_gallery_add' %}">
+
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Başlık</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Açıklama</label>
+                        <textarea name="description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Medya Tipi</label>
+                        <select name="media_type" class="form-control" id="newMediaType">
+                            <option value="image">Resim</option>
+                            <option value="video">Video</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" id="newImageUpload">
+                        <label class="form-label">Resim</label>
+                        <input type="file" name="image" class="form-control">
+                    </div>
+                    <div class="mb-3" id="newVideoUpload" style="display: none;">
+                        <label class="form-label">Video URL</label>
+                        <input type="url" name="video_url" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sıralama</label>
+                        <input type="number" name="order" class="form-control" value="0">
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" name="is_active" class="form-check-input" checked>
+                            <label class="form-check-label">Aktif</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" name="is_featured" class="form-check-input">
+                            <label class="form-check-label">Öne Çıkan</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Medya tipi seçimine göre form alanlarını göster/gizle
+    function updateMediaFields(selectId, imageId, videoId) {
+        const select = document.getElementById(selectId);
+        const imageUpload = document.getElementById(imageId);
+        const videoUpload = document.getElementById(videoId);
+        
+        select.addEventListener('change', function() {
+            if (this.value === 'image') {
+                imageUpload.style.display = 'block';
+                videoUpload.style.display = 'none';
+            } else {
+                imageUpload.style.display = 'none';
+                videoUpload.style.display = 'block';
+            }
+        });
+    }
+
+    // Yeni ekleme formu için
+    updateMediaFields('newMediaType', 'newImageUpload', 'newVideoUpload');
+
+    // Düzenleme formları için
+    document.querySelectorAll('[id^="mediaType"]').forEach(select => {
+        const id = select.id.replace('mediaType', '');
+        updateMediaFields(
+            `mediaType${id}`,
+            `imageUpload${id}`,
+            `videoUpload${id}`
+        );
+    });
+</script>
+{% endblock %}

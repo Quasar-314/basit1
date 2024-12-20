@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hakkımızda - Baran Anahtarcı{% endblock %}
+
+{% block content %}
+<section class="about-hero py-5 mt-4 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8 mx-auto text-center">
+                <h1 class="display-4">{{ about.title }}</h1>
+                <p class="lead">{{ about.short_description }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-content py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Ana İçerik -->
+            <div class="col-lg-8">
+                {% if about.story %}
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Hikayemiz</h2>
+                        <div class="card-text">
+                            {{ about.story|safe }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if about.mission %}
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Misyonumuz</h2>
+                        <div class="card-text">
+                            {{ about.mission|safe }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if about.vision %}
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="card-title">Vizyonumuz</h2>
+                        <div class="card-text">
+                            {{ about.vision|safe }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Yan Panel -->
+            <div class="col-lg-4">
+                <!-- Neden Biz? -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Neden Biz?</h3>
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                {{ about.years_experience }} Yıllık Deneyim
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                7/24 Hizmet
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Profesyonel Ekipman
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Güvenilir Hizmet
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- İstatistikler -->
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title">Rakamlarla Biz</h3>
+                        <div class="text-center">
+                            <div class="mb-4">
+                                <i class="fas fa-users fa-2x text-primary mb-2"></i>
+                                <h4>{{ about.happy_customers }}+</h4>
+                                <p class="text-muted">Mutlu Müşteri</p>
+                            </div>
+                            <div class="mb-4">
+                                <i class="fas fa-key fa-2x text-primary mb-2"></i>
+                                <h4>{{ about.completed_jobs }}+</h4>
+                                <p class="text-muted">Tamamlanan İş</p>
+                            </div>
+                            <div>
+                                <i class="fas fa-certificate fa-2x text-primary mb-2"></i>
+                                <h4>{{ about.years_experience }}</h4>
+                                <p class="text-muted">Yıllık Deneyim</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Hizmetlerimiz Bölümü -->
+<section class="services-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Hizmetlerimiz</h2>
+        <div class="row">
+            {% for service in services %}
+            {% if service.is_active %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body text-center">
+                        {% if service.image %}
+                        <img src="{{ service.image.url }}" alt="{{ service.title }}" 
+                             class="mb-3" style="width: 80px; height: 80px; object-fit: contain;">
+                        {% endif %}
+                        <h4 class="card-title">{{ service.title }}</h4>
+                        <div class="card-text">
+                            {{ service.description|safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">Henüz hizmet eklenmemiş.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Basında Biz Bölümü -->
+<section class="media-mentions py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Basında Biz</h2>
+        <div class="row">
+            {% for mention in media_mentions %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if mention.image %}
+                    <img src="{{ mention.image.url }}" class="card-img-top" alt="{{ mention.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ mention.title }}</h5>
+                        <p class="card-text">{{ mention.description }}</p>
+                        <a href="{{ mention.url }}" target="_blank" class="btn btn-primary">Haberi Oku</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Ekip Bölümü -->
+<section class="team-section py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Ekibimiz</h2>
+        <div class="row">
+            {% for member in team_members %}
+            {% if member.is_active %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm text-center h-100">
+                    <div class="card-body">
+                        {% if member.image %}
+                        <img src="{{ member.image.url }}" alt="{{ member.name }}" 
+                             class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                        {% endif %}
+                        <h5 class="card-title">{{ member.name }}</h5>
+                        <p class="text-muted">{{ member.position }}</p>
+                        {% if member.bio %}
+                        <p class="small text-muted">{{ member.bio }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">Henüz ekip üyesi eklenmemiş.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

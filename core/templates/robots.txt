@@ -1,0 +1,7 @@
+# templates/robots.txt
+User-agent: *
+Allow: /
+Sitemap: https://www.barananahtarci.com/sitemap.xml
+
+Disallow: /admin/
+Disallow: /*?*

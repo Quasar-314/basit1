@@ -1,0 +1,356 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<!-- Carousel Section -->
+<div id="mainCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6000">
+    <div class="carousel-indicators">
+        {% for slide in carousel_slides %}
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></button>
+        {% endfor %}
+    </div>
+    <div class="carousel-inner">
+        {% for slide in carousel_slides %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ slide.image.url }}" class="d-block w-100" alt="{{ slide.title }}">
+            <div class="carousel-caption">
+                <h2>{{ slide.title }}</h2>
+                <p>{{ slide.description }}</p>
+                {% if slide.button_text %}
+                    <a href="{{ slide.button_url }}" class="btn btn-primary btn-lg">{{ slide.button_text }}</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>
+
+<!-- About Section -->
+<section class="about-preview py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="about-content">
+                    <h2 class="section-title">Hakkımızda</h2>
+                    <div class="mission-preview">
+                        <h3>Misyonumuz</h3>
+                        <p>{{ about.mission|truncatewords:50 }}</p>
+                    </div>
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Profesyonel Ekip</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>{{ about.years_experience }}+ Yıllık Tecrübe</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>7/24 Hizmet</span>
+                        </div>
+                    </div>
+                    <a href="{% url 'about:about' %}" class="btn btn-outline-primary">Detaylı Bilgi</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-image">
+                    <img src="{{ about.image.url }}" alt="Hakkımızda" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Latest Gallery Section -->
+<section class="gallery-section py-5">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Son Yüklenenler</h2>
+        <div class="position-relative">
+            <!-- 
+                data-bs-ride="carousel" : Otomatik oynatma
+                data-bs-interval="8000" : Her 8 saniyede bir geçiş
+                data-bs-pause="hover" : Mouse üzerine gelince durma
+             -->
+            <div id="galleryCarousel" class="carousel slide" 
+                 data-bs-ride="carousel" 
+                 data-bs-interval="8000" 
+                 data-bs-pause="hover">
+                
+                <!-- Carousel İndikatörleri -->
+                <div class="carousel-indicators">
+                    {% for image in latest_images|slice:":10"|divide_into_groups:4 %}
+                        <button type="button" 
+                                data-bs-target="#galleryCarousel" 
+                                data-bs-slide-to="{{ forloop.counter0 }}" 
+                                {% if forloop.first %}class="active"{% endif %}>
+                        </button>
+                    {% endfor %}
+                </div>
+
+                <!-- Carousel İçeriği -->
+                <div class="carousel-inner">
+                    {% for group in latest_images|slice:":10"|divide_into_groups:4 %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="row">
+                            {% for image in group %}
+                            <!-- Latest Gallery Section içindeki resim kartları -->
+                            <div class="col-md-3">
+                                <div class="gallery-item">
+                                    <img src="{{ image.image.url }}" 
+                                         class="img-fluid" 
+                                         alt="{{ image.title }}">
+                                    <div class="gallery-overlay">
+                                        <a href="{{ image.image.url }}" 
+                                           data-fancybox="gallery-home"
+                                           data-caption="{{ image.title }}"
+                                           class="gallery-link">
+                                            <i class="fas fa-search-plus"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Kontrol Butonları -->
+                <button class="carousel-control-prev gallery-control" 
+                        type="button" 
+                        data-bs-target="#galleryCarousel" 
+                        data-bs-slide="prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-control-next gallery-control" 
+                        type="button" 
+                        data-bs-target="#galleryCarousel" 
+                        data-bs-slide="next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Products Section  -->
+<section class="products-section py-5">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Öne Çıkan Ürünler</h2>
+        <div class="position-relative">
+            <div id="productsCarousel" class="carousel slide" 
+                 data-bs-ride="carousel" 
+                 data-bs-interval="8000" 
+                 data-bs-pause="hover">
+                
+                <!-- Carousel İndikatörleri -->
+                <div class="carousel-indicators">
+                    {% for group in featured_products|divide_into_groups:3 %}
+                        <button type="button" 
+                                data-bs-target="#productsCarousel" 
+                                data-bs-slide-to="{{ forloop.counter0 }}" 
+                                {% if forloop.first %}class="active"{% endif %}>
+                        </button>
+                    {% endfor %}
+                </div>
+
+                <!-- Carousel İçeriği -->
+                <div class="carousel-inner">
+                    {% for group in featured_products|divide_into_groups:3 %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="row g-4">
+                            {% for product in group %}
+                            <div class="col-md-4">
+                                <div class="product-card">
+                                    <div class="product-image">
+                                        <img src="{{ product.image.url }}" alt="{{ product.title }}" class="img-fluid">
+                                    </div>
+                                    <div class="product-content">
+                                        <h3>{{ product.title }}</h3>
+                                        <p>{{ product.short_description }}</p>
+                                        <a href="{% url 'products:product_detail' product.slug %}"
+                                           class="product-link">
+                                            Detaylı Bilgi 
+                                            <i class="fas fa-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Kontrol Butonları -->
+                <button class="carousel-control-prev product-control" 
+                        type="button" 
+                        data-bs-target="#productsCarousel" 
+                        data-bs-slide="prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-control-next product-control" 
+                        type="button" 
+                        data-bs-target="#productsCarousel" 
+                        data-bs-slide="next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+                <!-- Kontrol Butonları -->
+                <button class="carousel-control-prev service-control" 
+                        type="button" 
+                        data-bs-target="#servicesCarousel" 
+                        data-bs-slide="prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-control-next service-control" 
+                        type="button" 
+                        data-bs-target="#servicesCarousel" 
+                        data-bs-slide="next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Media Mentions Section -->
+<section class="media-mentions py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Basında Biz</h2>
+        <div class="row">
+            {% for mention in media_mentions %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if mention.image %}
+                    <img src="{{ mention.image.url }}" class="card-img-top" alt="{{ mention.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ mention.title }}</h5>
+                        <p class="card-text">{{ mention.description }}</p>
+                        <a href="{{ mention.url }}" target="_blank" class="btn btn-primary">Haberi Oku</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Reviews Section -->
+<section class="reviews-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Müşteri Yorumları</h2>
+        <div class="position-relative">
+            <div id="reviewsCarousel" class="carousel slide" 
+                 data-bs-ride="carousel" 
+                 data-bs-interval="6000" 
+                 data-bs-pause="hover">
+                
+                <!-- Carousel Göstergeleri -->
+                <div class="carousel-indicators">
+                    {% for review in approved_reviews %}
+                        <button type="button" 
+                                data-bs-target="#reviewsCarousel" 
+                                data-bs-slide-to="{{ forloop.counter0 }}" 
+                                {% if forloop.first %}class="active"{% endif %}></button>
+                    {% endfor %}
+                </div>
+
+                <!-- Carousel İçeriği -->
+                <div class="carousel-inner">
+                    {% for review in approved_reviews %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="review-card text-center">
+                            {% if review.image %}
+                            <div class="review-image mb-4">
+                                <img src="{{ review.image.url }}" alt="Review image" 
+                                     class="img-fluid rounded" style="max-height: 200px;">
+                            </div>
+                            {% endif %}
+                            <div class="review-quote">&ldquo;</div>
+                            <blockquote class="review-text">
+                                {{ review.comment }}
+                            </blockquote>
+                            <div class="review-rating my-3">
+                                {% for _ in ""|ljust:review.rating %}
+                                    <i class="fas fa-star text-warning"></i>
+                                {% endfor %}
+                            </div>
+                            <div class="review-author">
+                                <h5 class="mb-1">{{ review.name }}</h5>
+                                <p class="text-muted mb-0">{{ review.created_at|date:"d.m.Y" }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Kontrol Butonları -->
+                <button class="carousel-control-prev review-control" type="button" 
+                        data-bs-target="#reviewsCarousel" data-bs-slide="prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-control-next review-control" type="button" 
+                        data-bs-target="#reviewsCarousel" data-bs-slide="next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'contact:contact' %}#reviewForm" class="btn btn-primary">
+                Değerlendirme Yap <i class="fas fa-pen ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="statistics-section py-5 bg-light">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 col-6 mb-4">
+                <div class="stat-item">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label">Yıllık Tecrübe</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="stat-item">
+                    <div class="stat-number">10000+</div>
+                    <div class="stat-label">Mutlu Müşteri</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Hizmet</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Müşteri Memnuniyeti</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+

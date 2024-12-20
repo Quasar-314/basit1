@@ -1,0 +1,15 @@
+# requirements.txt
+django==5.0
+pillow==10.1
+django-ckeditor==6.7
+django-cleanup==8.0
+django-compressor==4.4
+django-crispy-forms==2.1
+python-decouple==3.8
+psycopg2-binary==2.9.9
+gunicorn==21.2
+whitenoise==6.6
+argon2-cffi==23.1
+django-ratelimit==4.1
+bleach==6.1
+social-auth-app-django==5.4.0

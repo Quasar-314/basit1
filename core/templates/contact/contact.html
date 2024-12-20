@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}İletişim - Baran Anahtarcı{% endblock %}
+
+{% block content %}
+<section class="contact-section py-5 mt-4">
+    <div class="container">
+        <div class="row">
+            <!-- İletişim Formu -->
+            <div class="col-lg-8">
+                <!-- İletişim Formu -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title mb-4">Bize Ulaşın</h2>
+                        <form method="post" id="contactForm">
+                            {% csrf_token %}
+                            <input type="hidden" name="form_type" value="contact"> 
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ contact_form.name.id_for_label }}" class="form-label">Ad Soyad</label>
+                                    {{ contact_form.name|add_class:"form-control" }}
+                                    {% if contact_form.name.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ contact_form.name.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ contact_form.phone.id_for_label }}" class="form-label">Telefon</label>
+                                    {{ contact_form.phone|add_class:"form-control" }}
+                                    {% if contact_form.phone.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ contact_form.phone.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ contact_form.email.id_for_label }}" class="form-label">E-posta</label>
+                                {{ contact_form.email|add_class:"form-control" }}
+                                {% if contact_form.email.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ contact_form.email.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ contact_form.subject.id_for_label }}" class="form-label">Konu</label>
+                                {{ contact_form.subject|add_class:"form-control" }}
+                                {% if contact_form.subject.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ contact_form.subject.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ contact_form.message.id_for_label }}" class="form-label">Mesajınız</label>
+                                {{ contact_form.message|add_class:"form-control" }}
+                                {% if contact_form.message.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ contact_form.message.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Gönder</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- İletişim Bilgileri -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">İletişim Bilgileri</h3>
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                <strong>Adres:</strong><br>
+                                [Adres bilgisi buraya gelecek]
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-phone text-primary me-2"></i>
+                                <strong>Telefon:</strong><br>
+                                +90 xxx xxx xx xx
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-envelope text-primary me-2"></i>
+                                <strong>E-posta:</strong><br>
+                                info@barananahtarci.com
+                            </li>
+                            <li>
+                                <i class="fas fa-clock text-primary me-2"></i>
+                                <strong>Çalışma Saatleri:</strong><br>
+                                7/24 Hizmet
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Harita -->
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title">Konum</h3>
+                        <div class="map-container">
+                            <iframe 
+                                src="[Google Maps Embed URL buraya gelecek]"
+                                width="100%" 
+                                height="300" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+   <!-- İletişim formundan sonra -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h2 class="card-title mb-4">Değerlendirme Yap</h2>
+            <form method="post" id="reviewForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="review">
+                
+                <div class="mb-3">
+                    <label class="form-label">Adınız Soyadınız</label>
+                    {{ review_form.name|add_class:"form-control" }}
+                    {% if review_form.name.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ review_form.name.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Puanınız</label>
+                    <div class="star-rating">
+                        <input type="radio" id="star5" name="rating" value="5" {% if review_form.rating.value == 5 %}checked{% endif %}>
+                        <label for="star5" title="5 yıldız"><i class="fas fa-star"></i></label>
+                        
+                        <input type="radio" id="star4" name="rating" value="4" {% if review_form.rating.value == 4 %}checked{% endif %}>
+                        <label for="star4" title="4 yıldız"><i class="fas fa-star"></i></label>
+                        
+                        <input type="radio" id="star3" name="rating" value="3" {% if review_form.rating.value == 3 %}checked{% endif %}>
+                        <label for="star3" title="3 yıldız"><i class="fas fa-star"></i></label>
+                        
+                        <input type="radio" id="star2" name="rating" value="2" {% if review_form.rating.value == 2 %}checked{% endif %}>
+                        <label for="star2" title="2 yıldız"><i class="fas fa-star"></i></label>
+                        
+                        <input type="radio" id="star1" name="rating" value="1" {% if review_form.rating.value == 1 %}checked{% endif %}>
+                        <label for="star1" title="1 yıldız"><i class="fas fa-star"></i></label>
+                    </div>
+                    {% if review_form.rating.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ review_form.rating.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                
+                <div class="mb-3">
+                    <label class="form-label">Yorumunuz</label>
+                    {{ review_form.comment|add_class:"form-control" }}
+                    {% if review_form.comment.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ review_form.comment.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Resim (İsteğe Bağlı)</label>
+                    {{ review_form.image|add_class:"form-control" }}
+                    {% if review_form.image.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ review_form.image.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    Değerlendirme Gönder <i class="fas fa-paper-plane ms-1"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    
+</section>
+
+
+
+
+{% endblock %}

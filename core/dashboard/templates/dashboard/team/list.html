@@ -1,0 +1,65 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Ekibimiz{% endblock %}
+
+{% block page_title %}Ekibimiz{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <a href="{% url 'dashboard:team_member_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Yeni Ekip Üyesi Ekle
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sıra</th>
+                            <th>Fotoğraf</th>
+                            <th>Ad Soyad</th>
+                            <th>Pozisyon</th>
+                            <th>Durum</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in team_members %}
+                        <tr>
+                            <td>{{ member.order }}</td>
+                            <td>
+                                {% if member.image %}
+                                <img src="{{ member.image.url }}" alt="{{ member.name }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+                                {% endif %}
+                            </td>
+                            <td>{{ member.name }}</td>
+                            <td>{{ member.position }}</td>
+                            <td>
+                                {% if member.is_active %}
+                                <span class="badge bg-success">Aktif</span>
+                                {% else %}
+                                <span class="badge bg-danger">Pasif</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'dashboard:team_member_edit' member.pk %}" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'dashboard:team_member_delete' member.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('Bu ekip üyesini silmek istediğinize emin misiniz?')">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

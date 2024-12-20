@@ -1,0 +1,159 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    :root {
+        --primary: #2c3e50;
+        --secondary: #34495e;
+        --accent: #3498db;
+        --background: #f5f6fa;
+    }
+
+    /* Header Styles */
+    #header {
+        background: var(--primary);
+        color: white;
+        padding: 1rem 2rem;
+    }
+
+    #branding h1 {
+        font-weight: 600;
+    }
+
+    .module h2, .module caption {
+        background: var(--primary);
+        color: white;
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    /* Content Styles */
+    #content {
+        padding: 2rem;
+        background: var(--background);
+    }
+
+    .dashboard #content {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Card Styles */
+    .module {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 1.5rem;
+        border: none;
+    }
+
+    /* Link Styles */
+    a:link, a:visited {
+        color: var(--accent);
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: var(--primary);
+    }
+
+    /* Button Styles */
+    .button, input[type=submit], input[type=button], .submit-row input {
+        background: var(--accent);
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .button:hover, input[type=submit]:hover, input[type=button]:hover {
+        background: var(--primary);
+    }
+
+    /* Table Styles */
+    #changelist table {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    #changelist table thead th {
+        background: var(--primary);
+        color: white;
+        padding: 12px 8px;
+    }
+
+    #changelist table tbody tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    /* Form Styles */
+    .form-row {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .form-row label {
+        font-weight: 500;
+        color: var(--secondary);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        #header {
+            padding: 1rem;
+        }
+
+        #content {
+            padding: 1rem;
+        }
+    }
+
+    /* Custom Additions */
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--accent);
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: var(--secondary);
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <i class="fas fa-tachometer-alt"></i> 
+        {{ site_header|default:_('Django Administration') }}
+    </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

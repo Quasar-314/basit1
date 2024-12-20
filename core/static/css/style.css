@@ -1,0 +1,886 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #34495e;
+    --accent-color: #3498db;
+    --text-color: #2c3e50;
+    --light-bg: #f8f9fa;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+/* General Styles */
+body {
+    padding-top: 76px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header Styles */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    padding: 100px 0;
+}
+
+
+/* About Preview Section */
+.about-preview {
+    background-color: var(--light-bg);
+}
+
+.about-content {
+    padding: 2rem;
+}
+/* Card Styles */
+.card {
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Footer Styles */
+.footer {
+    background-color: var(--primary-color);
+}
+
+.social-links a {
+    font-size: 1.5rem;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: var(--accent-color) !important;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .hero-section {
+        text-align: center;
+        padding: 50px 0;
+    }
+    
+    .hero-section img {
+        margin-top: 30px;
+    }
+}
+
+
+
+
+/* Modern Variables */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #34495e;
+    --accent-color: #3498db;
+    --text-color: #2c3e50;
+    --light-bg: #f8f9fa;
+    --border-radius: 8px;
+    --transition-slow: all 0.5s ease;
+}
+/* Carousel Styling */
+#mainCarousel {
+    margin-top: -76px;  /* Offset for fixed navbar */
+}
+
+.carousel-item {
+    transition: transform 2s ease-in-out !important; /* Daha yavaş geçiş */
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 600px; /* Ana slider yüksekliği */
+    object-fit: cover;
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    max-width: 600px;
+    margin: 0 auto;
+    backdrop-filter: blur(5px);
+}
+
+/* Gallery Section */
+.gallery-section {
+    background: var(--light-bg);
+}
+
+.gallery-item {
+    position: relative;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.gallery-control, 
+.service-control {
+    width: 40px;
+    height: 40px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.carousel:hover .gallery-control,
+.carousel:hover .service-control {
+    opacity: 1;
+}
+
+
+.gallery-item:hover .gallery-overlay {
+    opacity: 1;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.1);
+}
+
+.gallery-link {
+    color: white;
+    font-size: 1.5rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.gallery-link:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.gallery-control, .service-control {
+    width: 40px;
+    height: 40px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    opacity: 1;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.gallery-control:hover,
+.service-control:hover {
+    background: var(--primary-color);
+    transform: scale(1.1);
+}
+
+
+.gallery-control i,
+.service-control i {
+    color: white;
+    font-size: 1.2rem;
+}
+
+
+/* Service Cards */
+.service-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.5s ease;
+    height: 100%;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.service-icon {
+    font-size: 2.5rem;
+    color: var(--accent-color);
+    margin-bottom: 1.5rem;
+}
+
+.service-link {
+    color: var(--accent-color);
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 1rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.service-link:hover {
+    color: var(--primary-color);
+}
+
+/* Statistics Section */
+.stat-item {
+    padding: 2rem;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+/* Section Titles */
+.section-title {
+    position: relative;
+    padding-bottom: 1rem;
+    margin-bottom: 3rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: var(--accent-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .carousel-item {
+        height: 400px;
+    }
+
+    .carousel-caption {
+        bottom: 10%;
+        padding: 1rem;
+    }
+
+    .stat-item {
+        margin-bottom: 1rem;
+    }
+    .gallery-item img {
+        height: 150px;
+    }
+    
+    .gallery-control,
+    .service-control {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+
+
+
+
+
+
+.features-list {
+    margin: 2rem 0;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.feature-item i {
+    color: var(--accent-color);
+    margin-right: 1rem;
+    font-size: 1.2rem;
+}
+
+.about-image img {
+    width: 100%;
+    height: 400px; /* About resimlerinin yüksekliği */
+    object-fit: cover;
+    transition: var(--transition-slow);
+}
+
+.about-image img:hover {
+    transform: scale(1.02);
+}
+
+/* Gallery and Services Transitions */
+#galleryCarousel .carousel-item,
+#servicesCarousel .carousel-item {
+    transition: transform 1.5s ease-in-out;
+}
+
+.gallery-item img {
+    transition: var(--transition-slow);
+}
+
+.service-card {
+    transition: var(--transition-slow);
+}
+
+/* Modern Button Styles */
+.btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 500;
+    transition: var(--transition-slow);
+}
+
+.btn-primary {
+    background: var(--accent-color);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+}
+
+.btn-outline-primary:hover {
+    background: var(--accent-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .carousel-item img {
+        height: 400px;
+    }
+    
+    .gallery-item img {
+        height: 200px;
+    }
+    
+    .product-card .product-image img {
+        height: 250px;
+    }
+    
+    .about-image img {
+        height: 300px;
+    }
+    .carousel-caption {
+
+        padding: 1rem;
+    }
+    
+    .about-content {
+        text-align: center;
+    }
+    
+    .feature-item {
+        justify-content: center;
+    }
+}
+
+.embed-responsive {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+.embed-responsive iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+video.card-img-top {
+    width: 100%;
+    height: auto;
+    max-height: 300px; /* veya istediğiniz bir değer */
+    object-fit: cover;
+}
+
+
+
+
+
+
+
+
+.video-container {
+    position: relative;
+    padding-top: 56.25%; /* 16:9 aspect ratio */
+    background: #000;
+    cursor: pointer;
+}
+
+.video-container img.video-thumbnail {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.play-button:hover {
+    background: rgba(0, 0, 0, 0.9);
+    width: 65px;
+    height: 65px;
+}
+
+.play-button i {
+    color: white;
+    font-size: 24px;
+}
+
+/* Video Modal Styles */
+.video-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+}
+
+.video-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 1000px;
+}
+
+.modal-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+}
+
+.video-wrapper video,
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+
+/* Image Modal Styles */
+.image-container {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.zoom-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.image-container:hover .zoom-button {
+    opacity: 1;
+}
+
+.zoom-button i {
+    color: white;
+    font-size: 24px;
+}
+
+.image-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+}
+
+.image-modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90vh;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.image-modal-content img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+.modal-caption {
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: white;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+
+
+/* static/css/reviews.css */
+.reviews-section {
+    background-color: #f8f9fa;
+    padding: 60px 0;
+}
+
+.review-card {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+}
+
+.review-quote {
+    font-size: 60px;
+    color: #ffd700;
+    line-height: 1;
+    margin-bottom: 20px;
+    font-family: Georgia, serif;
+}
+.review-text {
+    font-size: 18px;
+    font-style: italic;
+    color: #555;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.review-rating {
+    font-size: 24px;
+}
+
+.review-rating .fas.fa-star {
+    color: #ffd700;
+    margin: 0 2px;
+}
+.review-author {
+    margin-top: 20px;
+}
+
+.review-control {
+    width: 40px;
+    height: 40px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 15px;
+}
+.review-author h5 {
+    font-size: 18px;
+    color: #333;
+}
+.review-control i {
+    color: white;
+    font-size: 18px;
+}
+
+#reviewsCarousel .carousel-indicators {
+    bottom: -40px;
+}
+
+#reviewsCarousel .carousel-indicators button {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 0 5px;
+    background-color: #ccc;
+}
+
+#reviewsCarousel .carousel-indicators button.active {
+    background-color: #ffd700;
+}
+
+
+
+/* static/css/reviews.css - mevcut CSS'e ekleyin */
+
+/* Kullanıcı Profil Bölümü */
+
+
+.rating-input {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.rating-input input {
+    display: none;
+}
+
+.rating-input label {
+    cursor: pointer;
+    font-size: 24px;
+    color: #ddd;
+    transition: all 0.2s ease;
+}
+
+.rating-input label:hover,
+.rating-input label:hover ~ label,
+.rating-input input:checked ~ label {
+    color: #ffd700;
+}
+
+.rating-input input:checked + label {
+    transform: scale(1.2);
+}
+
+
+
+
+
+.btn-google img {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.btn-light {
+    transition: all 0.2s ease;
+}
+
+.btn-light:hover {
+    background: #f8f9fa;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+}
+
+
+.google-signin-container {
+    text-align: center;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 10px;
+}
+
+.google-signin-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    color: #666;
+    text-decoration: none;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.google-signin-btn:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
+    color: #444;
+}
+
+.user-profile {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.user-profile img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Google tarzı yorum sistemi */
+.google-review-container {
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+}
+
+.review-placeholder {
+    text-align: center;
+}
+
+.avatar-placeholder {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 15px;
+    color: #757575;
+}
+
+.review-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.rating-stars {
+    font-size: 24px;
+    color: #fbbc05;
+    margin-bottom: 15px;
+}
+
+.rating-stars.disabled {
+    color: #ddd;
+}
+
+.rating-stars input {
+    display: none;
+}
+
+.rating-stars label {
+    cursor: pointer;
+    padding: 0 2px;
+}
+
+.rating-stars:not(.disabled) label:hover,
+.rating-stars:not(.disabled) label:hover ~ label,
+.rating-stars input:checked ~ label {
+    color: #fbbc05;
+}
+
+.btn-google {
+    background: #fff;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    color: #3c4043;
+    font-family: 'Google Sans', sans-serif;
+    font-size: 14px;
+    padding: 8px 16px;
+    transition: background-color 0.3s;
+}
+
+.btn-google:hover {
+    background-color: #f8f9fa;
+    border-color: #dadce0;
+    color: #3c4043;
+}
+
+.google-review-form {
+    padding: 15px;
+}
+
+/* Form alanları için Google Material tasarım */
+.form-control {
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+.form-control:focus {
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 2px rgba(26,115,232,0.2);
+}
+
+
+.star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    color: #ddd;
+    cursor: pointer;
+    font-size: 30px;
+    padding: 0 4px;
+    transition: all 0.2s ease;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: #ffd700;
+}
+
+.star-rating label:hover i,
+.star-rating label:hover ~ label i,
+.star-rating input:checked ~ label i {
+    transform: scale(1.1);
+}

@@ -1,0 +1,204 @@
+<!-- templates/dashboard/carousel/list.html -->
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Carousel Yönetimi{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Carousel Yönetimi</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSlideModal">
+            <i class="fas fa-plus me-2"></i>Yeni Slayt Ekle
+        </button>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 150px;">Görsel</th>
+                            <th>Başlık</th>
+                            <th>Açıklama</th>
+                            <th>Buton Metni</th>
+                            <th>Sıralama</th>
+                            <th>Durum</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for slide in slides %}
+                        <tr>
+                            <td>
+                                <img src="{{ slide.image.url }}" alt="{{ slide.title }}" class="img-thumbnail" style="max-height: 80px;">
+                            </td>
+                            <td>{{ slide.title }}</td>
+                            <td>{{ slide.description|truncatewords:10 }}</td>
+                            <td>{{ slide.button_text }}</td>
+                            <td>{{ slide.order }}</td>
+                            <td>
+                                <span class="badge {% if slide.is_active %}bg-success{% else %}bg-danger{% endif %}">
+                                    {{ slide.is_active|yesno:"Aktif,Pasif" }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editSlideModal{{ slide.id }}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSlideModal{{ slide.id }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Düzenleme Modal -->
+                        <div class="modal fade" id="editSlideModal{{ slide.id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Slayt Düzenle</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:dashboard_carousel_edit' slide.id %}">
+                                        {% csrf_token %}
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Başlık</label>
+                                                <input type="text" name="title" class="form-control" value="{{ slide.title }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Açıklama</label>
+                                                <textarea name="description" class="form-control" rows="3">{{ slide.description }}</textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Görsel</label>
+                                                <input type="file" name="image" class="form-control">
+                                                {% if slide.image %}
+                                                    <img src="{{ slide.image.url }}" class="mt-2" style="max-height: 100px;">
+                                                {% endif %}
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Buton Metni</label>
+                                                        <input type="text" name="button_text" class="form-control" value="{{ slide.button_text }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Buton URL</label>
+                                                        <input type="url" name="button_url" class="form-control" value="{{ slide.button_url }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Sıralama</label>
+                                                <input type="number" name="order" class="form-control" value="{{ slide.order }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="form-check">
+                                                    <input type="checkbox" name="is_active" class="form-check-input" {% if slide.is_active %}checked{% endif %}>
+                                                    <label class="form-check-label">Aktif</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Silme Modal -->
+                        <div class="modal fade" id="deleteSlideModal{{ slide.id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Silme Onayı</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>"{{ slide.title }}" başlıklı slaytı silmek istediğinizden emin misiniz?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                        <form method="post" action="{% url 'dashboard:dashboard_carousel_delete' slide.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Sil</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">Henüz slayt eklenmemiş.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Yeni Ekle Modal -->
+<div class="modal fade" id="addSlideModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yeni Slayt Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:dashboard_carousel_add' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Başlık</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Açıklama</label>
+                        <textarea name="description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Görsel</label>
+                        <input type="file" name="image" class="form-control" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Buton Metni</label>
+                                <input type="text" name="button_text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Buton URL</label>
+                                <input type="url" name="button_url" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sıralama</label>
+                        <input type="number" name="order" class="form-control" value="0">
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" name="is_active" class="form-check-input" checked>
+                            <label class="form-check-label">Aktif</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

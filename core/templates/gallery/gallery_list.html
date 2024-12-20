@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load video_tags %}
+
+{% block title %}Galeri - Baran Anahtarcı{% endblock %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+
+<section class="gallery-section py-5 mt-4">
+    <div class="container">
+        <h1 class="text-center mb-5">Galeri</h1>
+
+        <!-- Filtre Butonları -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <button class="btn btn-outline-primary active" data-filter="all">Tümü</button>
+                <button class="btn btn-outline-primary" data-filter="image">Resimler</button>
+                <button class="btn btn-outline-primary" data-filter="video">Videolar</button>
+            </div>
+        </div>
+
+        <!-- Galeri Grid -->
+        <div class="row" id="gallery-grid">
+            {% for item in gallery_items %}
+            <div class="col-md-4 mb-4 gallery-item {{ item.media_type }}">
+                <div class="card h-100">
+                    {% if item.media_type == 'image' %}
+                        <div class="image-container" onclick="openImageModal('image-{{ item.id }}')">
+                            <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.title }}">
+                            <div class="zoom-button">
+                                <i class="fas fa-search-plus"></i>
+                            </div>
+                        </div>
+                        <!-- Image Modal -->
+                        <div id="image-{{ item.id }}" class="image-modal">
+                            <div class="image-modal-content">
+                                <span class="modal-close" onclick="closeImageModal('image-{{ item.id }}')">&times;</span>
+                                <img src="{{ item.image.url }}" alt="{{ item.title }}">
+                                {% if item.title %}
+                                    <div class="modal-caption">{{ item.title }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% elif item.media_type == 'video' %}
+                        <div class="video-container" onclick="openVideoModal('video-{{ item.id }}')">
+                            {% if item.video %}
+                                <img src="/api/placeholder/400/320" alt="Video thumbnail" class="video-thumbnail">
+                            {% elif item.video_url %}
+                                <img src="/api/placeholder/400/320" alt="Video thumbnail" class="video-thumbnail">
+                            {% endif %}
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <!-- Video Modal -->
+                        <div id="video-{{ item.id }}" class="video-modal">
+                            <div class="video-modal-content">
+                                <span class="modal-close" onclick="closeVideoModal('video-{{ item.id }}')">&times;</span>
+                                <div class="video-wrapper">
+                                    {% if item.video %}
+                                        <video controls>
+                                            <source src="{{ item.video.url }}" type="video/mp4">
+                                            Tarayıcınız video elementini desteklemiyor.
+                                        </video>
+                                    {% elif item.video_url %}
+                                        {% if 'youtube.com' in item.video_url or 'youtu.be' in item.video_url %}
+                                            <iframe src="https://www.youtube.com/embed/{{ item.video_url|youtube_id }}"
+                                                    allowfullscreen></iframe>
+                                        {% elif 'vimeo.com' in item.video_url %}
+                                            <iframe src="https://player.vimeo.com/video/{{ item.video_url|vimeo_id }}"
+                                                    allowfullscreen></iframe>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.title }}</h5>
+                        {% if item.description %}
+                            <p class="card-text">{{ item.description }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>Henüz galeri öğesi eklenmemiş.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+
+{% endblock %}

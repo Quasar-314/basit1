@@ -1,0 +1,174 @@
+<!-- templates/dashboard/messages/list.html -->
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Mesajlar{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link active" id="contact-tab" data-bs-toggle="tab" href="#contact">İletişim Mesajları</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="reviews-tab" data-bs-toggle="tab" href="#reviews">Müşteri Yorumları</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- İletişim Mesajları -->
+        <div class="tab-pane fade show active" id="contact">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>İsim</th>
+                                    <th>E-posta</th>
+                                    <th>Konu</th>
+                                    <th>Mesaj</th>
+                                    <th>Tarih</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for message in contact_messages %}
+                                <tr>
+                                    <td>{{ message.name }}</td>
+                                    <td>{{ message.email }}</td>
+                                    <td>{{ message.subject }}</td>
+                                    <td>{{ message.message|truncatewords:10 }}</td>
+                                    <td>{{ message.created_at|date:"d.m.Y H:i" }}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#messageModal{{ message.id }}">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <form method="post" action="{% url 'dashboard:message_delete' message.id %}" style="display: inline;" 
+                                              onsubmit="return confirm('Bu mesajı silmek istediğinizden emin misiniz?');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+
+                                <!-- Mesaj Detay Modal -->
+                                <div class="modal fade" id="messageModal{{ message.id }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Mesaj Detayı</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p><strong>İsim:</strong> {{ message.name }}</p>
+                                                <p><strong>E-posta:</strong> {{ message.email }}</p>
+                                                <p><strong>Konu:</strong> {{ message.subject }}</p>
+                                                <p><strong>Mesaj:</strong></p>
+                                                <p>{{ message.message }}</p>
+                                                <p><strong>Tarih:</strong> {{ message.created_at|date:"d.m.Y H:i" }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">Henüz mesaj yok.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Müşteri Yorumları -->
+        <div class="tab-pane fade" id="reviews">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>İsim</th>
+                                    <th>Ürün</th>
+                                    <th>Değerlendirme</th>
+                                    <th>Yorum</th>
+                                    <th>Durum</th>
+                                    <th>Tarih</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for review in customer_reviews %}
+                                <tr>
+                                    <td>{{ review.name }}</td>
+                                    <td>{{ review.product.name }}</td>
+                                    <td>
+                                        {% for i in "12345"|make_list %}
+                                            {% if forloop.counter <= review.rating %}
+                                                <i class="fas fa-star text-warning"></i>
+                                            {% else %}
+                                                <i class="far fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ review.review|truncatewords:10 }}</td>
+                                    <td>
+                                        {% if review.is_approved %}
+                                            <span class="badge bg-success">Onaylı</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Bekliyor</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ review.created_at|date:"d.m.Y H:i" }}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#reviewModal{{ review.id }}">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        {% if not review.is_approved %}
+                                            <button class="btn btn-sm btn-success">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        {% endif %}
+                                        <button class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Yorum Detay Modal -->
+                                <div class="modal fade" id="reviewModal{{ review.id }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Yorum Detayı</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p><strong>İsim:</strong> {{ review.name }}</p>
+                                                <p><strong>Ürün:</strong> {{ review.product.name }}</p>
+                                                <p><strong>Değerlendirme:</strong> {{ review.rating }}/5</p>
+                                                <p><strong>Yorum:</strong></p>
+                                                <p>{{ review.review }}</p>
+                                                <p><strong>Tarih:</strong> {{ review.created_at|date:"d.m.Y H:i" }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center">Henüz yorum yok.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
